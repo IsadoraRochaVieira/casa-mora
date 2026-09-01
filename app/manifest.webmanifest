@@ -1,0 +1,10 @@
+{
+  "name": "Casa Mora — sua jornada",
+  "short_name": "Casa Mora",
+  "description": "Um lugar para você morar em si mesma.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F4F0E7",
+  "theme_color": "#536B5A",
+  "icons": [{ "src": "assets/casa-mora-simbolo.png", "sizes": "343x357", "type": "image/png", "purpose": "any" }]
+}

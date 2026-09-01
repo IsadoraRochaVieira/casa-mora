@@ -1,0 +1,20 @@
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+*.local
+*.local.*
+
+# Vercel e dependências
+.vercel/
+node_modules/
+
+# Arquivos temporários de geração e renderização
+tmp/
+
+# Sistema e editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+

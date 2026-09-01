@@ -1,0 +1,12 @@
+const KEY="casa_mora_governanca_v1";
+const defaults={checks:{},vendors:[{name:"Vercel",role:"Hospedagem e APIs",data:"tráfego e logs",status:"revisar"},{name:"Supabase",role:"Conta e banco",data:"e-mail, mensagens e registros",status:"revisar"},{name:"Google Gemini",role:"IA escrita",data:"trechos de conversa",status:"revisar"},{name:"ElevenLabs",role:"Voz",data:"áudio e transcrição",status:"revisar"},{name:"Open-Meteo",role:"Clima",data:"coordenadas arredondadas",status:"mapeado"}]};
+let state=(()=>{try{return {...defaults,...JSON.parse(localStorage.getItem(KEY))}}catch{return structuredClone(defaults)}})();
+const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+document.querySelectorAll("nav button").forEach(button=>button.onclick=()=>{document.querySelectorAll("nav button,.panel").forEach(el=>el.classList.remove("active"));button.classList.add("active");document.getElementById(button.dataset.tab).classList.add("active")});
+document.querySelectorAll('.checklist input[type="checkbox"]').forEach((input,index)=>{const id=`check-${index}`;input.checked=Boolean(state.checks[id]);input.onchange=()=>{state.checks[id]=input.checked;save();updateScore()}});
+function updateScore(){const inputs=[...document.querySelectorAll('.checklist input')],done=inputs.filter(i=>i.checked).length,pct=Math.round(done/inputs.length*100);document.getElementById("globalScore").textContent=`${pct}%`;const release=[...document.querySelectorAll(".release input")],ready=release.every(i=>i.checked);const label=document.getElementById("releaseState");label.textContent=ready?"PRONTA PARA REVISÃO":"NÃO LIBERAR";label.classList.toggle("ready",ready)}
+function renderVendors(){document.getElementById("vendorRows").innerHTML=state.vendors.map(v=>`<tr><td>${escape(v.name)}</td><td>${escape(v.role)}</td><td>${escape(v.data)}</td><td><span class="status">${escape(v.status)}</span></td></tr>`).join("")}
+const escape=value=>String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+document.getElementById("addVendor").onclick=()=>document.getElementById("vendorDialog").showModal();
+document.getElementById("saveVendor").onclick=event=>{const name=document.getElementById("vendorName").value.trim(),role=document.getElementById("vendorRole").value.trim();if(!name||!role){event.preventDefault();return}state.vendors.push({name,role,data:document.getElementById("vendorData").value.trim()||"a mapear",status:"revisar"});save();renderVendors()};
+renderVendors();updateScore();
